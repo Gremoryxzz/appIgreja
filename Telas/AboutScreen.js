@@ -1,19 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Button, StyleSheet } from "react-native";
+import { signOut } from "firebase/auth";
+import { auth } from "../FirebaseConfig/firebaseConfig";   // ✅ padronizado
 
-export default function AboutScreen() {
+export default function SobreScreen({ navigation }) {
+  async function handleLogout() {
+    await signOut(auth);
+    navigation.replace("Login");
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sobre o App</Text>
-      <Text>
-        Este aplicativo foi desenvolvido para a Igreja ICP com o objetivo de facilitar a
-        comunicação, divulgar eventos e conectar membros.
-      </Text>
+      <Button title="Editar Perfil" onPress={() => navigation.navigate("EditarPerfil")} />
+      <Button title="Sair" onPress={handleLogout} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 10 }
+  container: { flex: 1, justifyContent: "center", alignItems: "center" }
 });

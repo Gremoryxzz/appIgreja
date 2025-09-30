@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons"; // Ícones bonitos
 
+// ⬇️ corrigido para bater com o arquivo que você tem
 import LoginScreen from "./Telas/LoginScreen";
 import HomeScreen from "./Telas/HomeScreen";
 import ChatScreen from "./Telas/ChatScreen";
