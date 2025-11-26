@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, TextInput, Button, Alert } from "react-native";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../FirebaseConfig/firebaseConfig";   // ✅ padronizado
+import { auth, db } from "../FirebaseConfig/firebaseConfig";
+import styles from "../estilos/LoginScreen.styles";   // ✅ import dos estilos externos
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -53,9 +54,3 @@ export default function LoginScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", padding: 20 },
-  title: { fontSize: 22, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 }
-});

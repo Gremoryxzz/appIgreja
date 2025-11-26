@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, Button, Alert } from "react-native";
 import * as Clipboard from "expo-clipboard";
+import styles from "../estilos/AbouScreen.styles";  // ✅ estilos externos
 
-export default function AboutScreen() {
+export default function DoacoesScreen() {
   // chave Pix da igreja (pode ser email, CPF ou telefone)
   const pixKey = "igrejaicp@gmail.com"; 
 
@@ -25,11 +26,3 @@ export default function AboutScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center", padding: 20 },
-  title: { fontSize: 22, fontWeight: "bold", marginBottom: 10 },
-  text: { fontSize: 16, textAlign: "center", marginBottom: 20 },
-  pixLabel: { fontSize: 18, fontWeight: "bold", marginTop: 10 },
-  pixKey: { fontSize: 16, color: "blue", marginBottom: 20 },
-});

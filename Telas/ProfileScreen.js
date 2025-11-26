@@ -4,12 +4,15 @@ import {
   Text,
   Image,
   Button,
-  StyleSheet,
   ActivityIndicator,
   Alert,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { auth, db } from "../FirebaseConfig/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import styles from "../estilos/ProfileScreen.styles";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ProfileScreen({ navigation }) {
   const [userData, setUserData] = useState(null);
@@ -43,7 +46,7 @@ export default function ProfileScreen({ navigation }) {
   }, []);
 
   if (loading) {
-    return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
+    return <ActivityIndicator size="large" style={styles.loading} />;
   }
 
   return (
@@ -57,40 +60,66 @@ export default function ProfileScreen({ navigation }) {
         style={styles.avatar}
       />
       <Text style={styles.name}>{userData?.nome || "Sem nome"}</Text>
-      <Text style={styles.email}>
-        {auth.currentUser?.email || "Email não disponível"}
-      </Text>
-      <Text style={styles.info}>
-        Telefone: {userData?.telefone || "Não informado"}
-      </Text>
-      <Text style={styles.info}>
-        Idade: {userData?.idade || "Não informada"}
-      </Text>
+      <Text style={styles.role}>Designer</Text>
+      <Text style={styles.location}>Los Angeles, LA</Text>
 
-      <Button
-        title="Editar Perfil"
-        onPress={() => navigation.navigate("EditProfile")}
+      <View style={styles.statsRow}>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>44</Text>
+          <Text style={styles.statLabel}>Following</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>4</Text>
+          <Text style={styles.statLabel}>Followers</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>0</Text>
+          <Text style={styles.statLabel}>Likes</Text>
+        </View>
+      </View>
+
+      <View style={styles.iconRow}>
+        <TouchableOpacity>
+          <Ionicons name="chatbubble-ellipses-outline" size={24} color="#555" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Ionicons name="call-outline" size={24} color="#555" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Ionicons name="mail-outline" size={24} color="#555" />
+        </TouchableOpacity>
+      </View>
+
+      <Text style={styles.galleryTitle}>Gallery</Text>
+      <FlatList
+        data={[
+          { id: "1", uri: "https://source.unsplash.com/random/1" },
+          { id: "2", uri: "https://source.unsplash.com/random/2" },
+          { id: "3", uri: "https://source.unsplash.com/random/3" },
+          { id: "4", uri: "https://source.unsplash.com/random/4" },
+          { id: "5", uri: "https://source.unsplash.com/random/5" },
+          { id: "6", uri: "https://source.unsplash.com/random/6" },
+        ]}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        contentContainerStyle={styles.galleryContainer}
+        renderItem={({ item }) => (
+          <Image source={{ uri: item.uri }} style={styles.galleryImage} />
+        )}
       />
-      <Button
-        title="Trocar Senha"
-        onPress={() => navigation.navigate("ChangePassword")}
-      />
-      <Button
-        title="Sair"
-        color="red"
-        onPress={async () => {
-          await auth.signOut();
-          navigation.replace("Login");
-        }}
-      />
+
+      <View style={styles.buttonGroup}>
+        <Button title="Editar Perfil" onPress={() => navigation.navigate("EditProfile")} />
+        <Button title="Trocar Senha" onPress={() => navigation.navigate("ChangePassword")} />
+        <Button
+          title="Sair"
+          color="red"
+          onPress={async () => {
+            await auth.signOut();
+            navigation.replace("Login");
+          }}
+        />
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", padding: 20 },
-  avatar: { width: 120, height: 120, borderRadius: 60, marginBottom: 20 },
-  name: { fontSize: 22, fontWeight: "bold" },
-  email: { fontSize: 16, color: "gray", marginBottom: 10 },
-  info: { fontSize: 16, marginBottom: 5 },
-});

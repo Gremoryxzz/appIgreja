@@ -3,7 +3,6 @@ import {
   View,
   TextInput,
   Button,
-  StyleSheet,
   Image,
   Alert,
   ActivityIndicator,
@@ -13,6 +12,7 @@ import { doc, getDoc, updateDoc, setDoc } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 import { updateProfile } from "firebase/auth";
+import styles from "../estilos/EditProfileScreen.styles";
 
 export default function EditProfileScreen({ navigation }) {
   const [nome, setNome] = useState("");
@@ -21,7 +21,6 @@ export default function EditProfileScreen({ navigation }) {
   const [photoURL, setPhotoURL] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // === Carregar dados do Firestore ===
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -40,7 +39,6 @@ export default function EditProfileScreen({ navigation }) {
         }
 
         const data = docSnap.data() || {};
-
         setNome(data.nome || "");
         setTelefone(data.telefone || "");
         setIdade(data.idade || "");
@@ -55,14 +53,13 @@ export default function EditProfileScreen({ navigation }) {
     loadData();
   }, []);
 
-  // === Selecionar imagem (FUNCIONA NO EXPO GO) ===
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
-      base64: true, // ESSENCIAL PARA FUNCIONAR NO EXPO GO
+      base64: true,
     });
 
     if (!result.canceled) {
@@ -74,19 +71,15 @@ export default function EditProfileScreen({ navigation }) {
           `profilePics/${auth.currentUser.uid}.jpg`
         );
 
-        // Upload baseado em BASE64 (compatível com Expo Go)
         await uploadString(storageRef, base64Img, "base64");
-
         const url = await getDownloadURL(storageRef);
         setPhotoURL(url);
-
       } catch (error) {
         Alert.alert("Erro", "Erro ao enviar a imagem: " + error.message);
       }
     }
   };
 
-  // === Salvar dados ===
   const handleUpdate = async () => {
     try {
       const uid = auth.currentUser.uid;
@@ -158,32 +151,3 @@ export default function EditProfileScreen({ navigation }) {
     </View>
   );
 }
-
-// === Estilos ===
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    alignItems: "center",
-  },
-  loader: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginBottom: 10,
-    backgroundColor: "#ddd",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 5,
-    width: "100%",
-  },
-});

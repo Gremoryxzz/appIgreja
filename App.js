@@ -30,7 +30,7 @@ function MainTabs() {
             iconName = "home";
           } else if (route.name === "Chat") {
             iconName = "chatbubble";
-          } else if (route.name === "Sobre") {
+          } else if (route.name === "Doações") {
             iconName = "information-circle";
           } else if (route.name === "Perfil") {
             iconName = "person";
@@ -44,7 +44,7 @@ function MainTabs() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Chat" component={ChatScreen} />
-      <Tab.Screen name="Sobre" component={AboutScreen} />
+      <Tab.Screen name="Doações" component={AboutScreen} />
       <Tab.Screen name="Perfil" component={ProfileScreen} />
     </Tab.Navigator>
   );

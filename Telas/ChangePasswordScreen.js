@@ -1,7 +1,12 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, TextInput, Button, Alert } from "react-native";
 import { auth } from "../FirebaseConfig/firebaseConfig";
-import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+import {
+  updatePassword,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+} from "firebase/auth";
+import styles from "../estilos/ChangePassawordScreen.styles"; // ✅ estilos externos
 
 export default function ChangePasswordScreen({ navigation }) {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -10,9 +15,17 @@ export default function ChangePasswordScreen({ navigation }) {
   const handleChangePassword = async () => {
     const user = auth.currentUser;
 
+    if (!user) {
+      Alert.alert("Erro", "Nenhum usuário autenticado.");
+      return;
+    }
+
     try {
       // Reautentica o usuário antes de trocar a senha
-      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
       await reauthenticateWithCredential(user, credential);
 
       // Atualiza a senha
@@ -44,8 +57,3 @@ export default function ChangePasswordScreen({ navigation }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 }
-});
